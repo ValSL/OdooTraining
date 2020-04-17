@@ -36,4 +36,10 @@ class LibraryBook(models.Model):
     cost_price = fields.Float('Book Cost', dp.get_precision('Book Price'))
     currency_id = fields.Many2one('res.currency', string='Currency')
     retail_price = fields.Monetary('Retail Price')
+    publisher_id = fields.Many2one('res.partner', string='Publisher', ondelete='set null', context={}, domain=[])
 
+
+class ResPartner(models.Model):
+    _inherit = 'res.partner'
+    publisher_book_ids = fields.One2many('library.book', 'publisher_id', string='Published Books')
+    author_book_ids = fields.Many2many('library.book', string='Authored Books')
