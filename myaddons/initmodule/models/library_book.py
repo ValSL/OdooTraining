@@ -1,4 +1,4 @@
-from odoo import fields, models
+from odoo import fields, models, api
 from odoo.addons import decimal_precision as dp
 
 
@@ -37,6 +37,16 @@ class LibraryBook(models.Model):
     currency_id = fields.Many2one('res.currency', string='Currency')
     retail_price = fields.Monetary('Retail Price')
     publisher_id = fields.Many2one('res.partner', string='Publisher', ondelete='set null', context={}, domain=[])
+
+    _sql_constraints = [
+        ('name_uniq', 'UNIQUE (name)', 'Book title must be unique')
+    ]
+
+    @api.constrains('date_release')
+    def _check_release_date(self):
+        for r in self:
+            if r.date_release > fields.Date.today():
+                raise models.ValidationError('Release date must be in the past')
 
 
 class ResPartner(models.Model):
