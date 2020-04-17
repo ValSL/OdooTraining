@@ -1,0 +1,2 @@
+# OdooTraining
+odoo development cookbook
