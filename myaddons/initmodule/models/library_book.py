@@ -34,4 +34,6 @@ class LibraryBook(models.Model):
     )
     reader_rating = fields.Float('Reader Average Rating', (14, 4))
     cost_price = fields.Float('Book Cost', dp.get_precision('Book Price'))
+    currency_id = fields.Many2one('res.currency', string='Currency')
+    retail_price = fields.Monetary('Retail Price')
 
