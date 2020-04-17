@@ -1,4 +1,5 @@
 from odoo import fields, models
+from odoo.addons import decimal_precision as dp
 
 
 class LibraryBook(models.Model):
@@ -32,4 +33,5 @@ class LibraryBook(models.Model):
         company_depends=False,
     )
     reader_rating = fields.Float('Reader Average Rating', (14, 4))
+    cost_price = fields.Float('Book Cost', dp.get_precision('Book Price'))
 
