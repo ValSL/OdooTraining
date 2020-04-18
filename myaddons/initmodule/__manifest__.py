@@ -9,9 +9,10 @@
     'version': '12.0.1.0.0',
     'depends': ['base', 'decimal_precision'],
     'data': [
-        'security/library_security.xml',
+        'security/groups.xml',
         'security/ir.model.access.csv',
-        'views/library_book.xml'
+        'views/library_book.xml',
+        'views/library_book_categ.xml'
     ],
     # 'demo': ['demo.xml'],
 }

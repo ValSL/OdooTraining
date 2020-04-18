@@ -6,8 +6,8 @@ class BookCategory(models.Model):
     name = fields.Char('Category')
 
     _parent_store = True
-    parent_left = fields.Integer(index=True)
-    parent_right = fields.Integer(index=True)
+    _parent_name = 'parent_id'
+    parent_path = fields.Char(index=True)
 
     parent_id = fields.Many2one(
         'library.book.category',
