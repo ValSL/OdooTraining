@@ -35,6 +35,7 @@
                     <field name="retail_price"/>
                     <field name="currency_id"/>
                     <field name="category_id"/>
+                    <field name="age_days"/>
                 </group>
                 <group>
                     <field name="short_name"/>

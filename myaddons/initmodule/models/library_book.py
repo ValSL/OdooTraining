@@ -1,5 +1,6 @@
 from odoo import fields, models, api
 from odoo.addons import decimal_precision as dp
+from datetime import timedelta
 
 
 class LibraryBook(models.Model):
@@ -39,6 +40,41 @@ class LibraryBook(models.Model):
     retail_price = fields.Monetary('Retail Price')
     publisher_id = fields.Many2one('res.partner', string='Publisher', ondelete='set null', context={}, domain=[])
     category_id = fields.Many2one('library.book.category')
+
+    age_days = fields.Float(
+        string='Days Since Release',
+        compute='_compute_age',
+        inverse='_inverce_age',
+        search='_search_age',
+        store=False,
+        compute_sudo=False
+    )
+
+    @api.depends('date_release')
+    def _compute_age(self):
+        today = fields.Date.today()
+        for book in self.filtered('date_release'):
+            delta = today - book.date_release
+            book.age_days = delta.days
+
+    def _inverce_age(self):
+        today = fields.Date.today()
+        for book in self.filtered('date_release'):
+            d = today - timedelta(days=book.age_days)
+            book.date_release = d
+
+    def _search_age(self, operator, value):
+        today = fields.Date.today()
+        value_days = timedelta(days=value)
+        value_date = today - value_days
+        # convert the operator:
+        # book with age > value have a date < value_date
+        operator_map = {
+            '>': '<', '>=': '<=',
+            '<': '>', '<=': '>=',
+        }
+        new_op = operator_map.get(operator, operator)
+        return [('date_release', new_op, value_date)]
 
     _sql_constraints = [
         ('name_uniq', 'UNIQUE (name)', 'Book title must be unique'),
