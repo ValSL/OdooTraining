@@ -3,8 +3,18 @@ from odoo.addons import decimal_precision as dp
 from datetime import timedelta
 
 
+class BaseArchive(models.AbstractModel):
+    _name = 'base.archive'
+    active = fields.Boolean(default=True)
+
+    def do_archive(self):
+        for record in self:
+            record.active = not record.active
+
+
 class LibraryBook(models.Model):
     _name = 'library.book'
+    _inherit = ['base.archive']
     _description = 'Book'
     _order = 'date_release desc, name'
     _rec_name = 'short_name'
@@ -14,7 +24,6 @@ class LibraryBook(models.Model):
     date_updated = fields.Datetime('Last Updated')
     author_ids = fields.Many2many('res.partner', string='Authors')
     notes = fields.Text('Internal notes')
-    active = fields.Boolean('Active', default=True)
     state = fields.Selection(
         [('draft', 'Not Available'),
          ('available', 'Available'),
@@ -116,3 +125,5 @@ class ResPartner(models.Model):
     def _compute_count_books(self):
         for r in self:
             r.count_books = len(r.author_book_ids)
+
+
