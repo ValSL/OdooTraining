@@ -39,6 +39,7 @@ class LibraryBook(models.Model):
     currency_id = fields.Many2one('res.currency', string='Currency')
     retail_price = fields.Monetary('Retail Price')
     publisher_id = fields.Many2one('res.partner', string='Publisher', ondelete='set null', context={}, domain=[])
+    publisher_city = fields.Char(string='Publiser City', related='publisher_id.city', readonly=True)
     category_id = fields.Many2one('library.book.category')
 
     age_days = fields.Float(
