@@ -14,6 +14,7 @@ class LibraryBook(models.Model):
     date_updated = fields.Datetime('Last Updated')
     author_ids = fields.Many2many('res.partner', string='Authors')
     notes = fields.Text('Internal notes')
+    active = fields.Boolean('Active', default=True)
     state = fields.Selection(
         [('draft', 'Not Available'),
          ('available', 'Available'),
@@ -50,6 +51,8 @@ class LibraryBook(models.Model):
         store=False,
         compute_sudo=False
     )
+
+    ref_doc_id = fields.Reference(selection='_referencable_models', string='Reference Document')
 
     @api.depends('date_release')
     def _compute_age(self):
@@ -95,6 +98,11 @@ class LibraryBook(models.Model):
         for r in self:
             if r.date_release > fields.Date.today():
                 raise models.ValidationError('Release date must be in the past')
+
+    @api.model
+    def _referencable_models(self):
+        models = self.env['ir.model'].search([('field_id.name', '=', 'message_ids')])
+        return [(x.model, x.name) for x in models]
 
 
 class ResPartner(models.Model):

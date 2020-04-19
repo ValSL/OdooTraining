@@ -15,4 +15,6 @@
         'views/library_book_categ.xml'
     ],
     # 'demo': ['demo.xml'],
+    'installable': True,
+    'application': True,
 }
