@@ -149,6 +149,11 @@ class LibraryBook(models.Model):
     def make_lost(self):
         self.change_state('lost')
 
+    @api.model
+    def get_all_library_members(self):
+        library_member_model = self.env['library.member']  # This is an empty recordset of model library.member
+        return library_member_model.search([])
+
 
 class ResPartner(models.Model):
     _inherit = 'res.partner'
