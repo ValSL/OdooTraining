@@ -1,6 +1,8 @@
 from odoo import fields, models, api
 from odoo.addons import decimal_precision as dp
 from datetime import timedelta
+from odoo.exceptions import UserError
+from odoo.tools.translate import _
 
 
 class BaseArchive(models.AbstractModel):
@@ -132,7 +134,8 @@ class LibraryBook(models.Model):
             if self.is_allowed_transition(book.state, new_state):
                 book.state = new_state
             else:
-                continue
+                msg = _(f'Moving from {book.state} to {new_state} is not allowed')
+                raise UserError(msg)
 
     @api.multi
     def make_available(self):
