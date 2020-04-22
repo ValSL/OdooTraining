@@ -29,6 +29,7 @@
                     <button name="make_available" string="Make available" type="object"/>
                     <button name="make_borrowed" string="Make borrowed" type="object"/>
                     <button name="make_lost" string="Make lost" type="object"/>
+                    <button name="create_categories" string="Crate categories" type="object"/>
                     <field name="state" widget="statusbar"/>
                 </header>
                 <group>

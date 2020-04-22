@@ -154,6 +154,27 @@ class LibraryBook(models.Model):
         library_member_model = self.env['library.member']  # This is an empty recordset of model library.member
         return library_member_model.search([])
 
+    def create_categories(self):
+        categ1 = {
+            'name': 'Child category 1',
+            'description': 'Description for child 1'
+        }
+        categ2 = {
+            'name': 'Child category 2',
+            'description': 'Description for child 2'
+        }
+        parent_category = {
+            'name': 'Parent category',
+            'email': 'Description for parent category',
+            'child_ids': [
+                (0, 0, categ1),
+                (0, 0, categ2),
+            ]
+        }
+        # Total 3 records (1 parent and 2 child) will be craeted in library.book.category model
+        record = self.env['library.book.category'].create(parent_category)
+        return True
+
 
 class ResPartner(models.Model):
     _inherit = 'res.partner'

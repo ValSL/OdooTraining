@@ -4,6 +4,7 @@ from odoo import fields, models, api
 class BookCategory(models.Model):
     _name = 'library.book.category'
     name = fields.Char('Category')
+    description = fields.Text('Description')
 
     _parent_store = True
     _parent_name = 'parent_id'
