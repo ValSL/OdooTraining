@@ -206,6 +206,15 @@ class LibraryBook(models.Model):
         record = self.env['library.book.category'].create(parent_category)
         return True
 
+    def mapped_books(self):
+        all_books = self.search([])
+        books_authors = self.get_author_names(all_books)
+        logger.info('Books Authors: %s', books_authors)
+
+    @api.model
+    def get_author_names(self, all_books):
+        return all_books.mapped('author_ids.name')
+
 
 class ResPartner(models.Model):
     _inherit = 'res.partner'
