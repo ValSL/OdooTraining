@@ -3,6 +3,9 @@ from odoo.addons import decimal_precision as dp
 from datetime import timedelta
 from odoo.exceptions import UserError
 from odoo.tools.translate import _
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 class BaseArchive(models.AbstractModel):
@@ -148,6 +151,22 @@ class LibraryBook(models.Model):
     @api.multi
     def make_lost(self):
         self.change_state('lost')
+
+    @api.multi
+    def change_update_date(self):
+        self.ensure_one()
+        self.date_updated = fields.Datetime.today()
+
+    @api.multi
+    def find_book(self):
+        domain = [
+            '|',
+            '&', ('name', 'ilike', 'FullLongTitle'), ('category_id.name', 'ilike', 'FirstCateg'),
+            '&', ('name', 'ilike', 'Book Name2'), ('category_id.name', 'ilike', 'Category Name2')
+        ]
+        books = self.search(domain)
+        logger.info(f'Books find {books}')
+        return True
 
     @api.model
     def get_all_library_members(self):

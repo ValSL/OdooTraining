@@ -30,6 +30,8 @@
                     <button name="make_borrowed" string="Make borrowed" type="object"/>
                     <button name="make_lost" string="Make lost" type="object"/>
                     <button name="create_categories" string="Crate categories" type="object"/>
+                    <button name="change_update_date" string="Update Date" type="object"/>
+                    <button name="find_book" string="Find Book" type="object"/>
                     <field name="state" widget="statusbar"/>
                 </header>
                 <group>
