@@ -60,6 +60,7 @@
                     <field name="reader_rating"/>
                     <field name="ref_doc_id"/>
                     <field name="manager_remarks"/>
+                    <field name="old_edition" />
                 </group>
             </form>
         </field>

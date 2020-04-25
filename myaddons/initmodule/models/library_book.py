@@ -24,6 +24,7 @@ class LibraryBook(models.Model):
     _order = 'date_release desc, name'
     _rec_name = 'short_name'
     name = fields.Char(string='Title', required=True)
+    isbn = fields.Char('ISBN')
     short_name = fields.Char(string='Short Title', size=100, translate=True, index=True)
     date_release = fields.Date(string='Release Date')
     date_updated = fields.Datetime('Last Updated')
@@ -69,6 +70,7 @@ class LibraryBook(models.Model):
 
     ref_doc_id = fields.Reference(selection='_referencable_models', string='Reference Document')
     manager_remarks = fields.Text('Manager Remarks')
+    old_edition = fields.Many2one('library.book', string='Old Edition')
 
     @api.depends('date_release')
     def _compute_age(self):
@@ -101,12 +103,13 @@ class LibraryBook(models.Model):
         ('positive_page', 'CHECK(pages>0)', 'No of pages must be positive')
     ]
 
+    @api.multi
     def name_get(self):
-        """ This method used to customize display name of the record """
         result = []
-        for record in self:
-            rec_name = "%s (%s)" % (record.name, record.date_release)
-            result.append((record.id, rec_name))
+        for book in self:
+            authors = book.author_ids.mapped('name')  # Здесь почему-то mapped не возвращает список всех авторов,
+            name = '%s (%s)' % (book.name, ', '.join(authors))  # возвращается только последний
+            result.append((book.id, name))
         return result
 
     @api.constrains('date_release')
@@ -138,6 +141,23 @@ class LibraryBook(models.Model):
             if 'manager_remarks' in values:
                 raise UserError('You are not allowed to modify manager_remarks')
         return super().create(values)
+
+    @api.model
+    def _name_search(self, name='', args=None, operator='ilike',  # Не совсем ясно
+                     limit=100, name_get_uid=None):
+        print("===", args)
+        args = [] if args is None else args.copy()
+        if not (name == '' and operator == 'ilike'):
+            args += ['|', '|',
+                     ('name', operator, name),
+                     ('isbn', operator, name),
+                     ('author_ids.name', operator, name)
+                     ]
+            books_ids = self.search(args).ids
+            return self.browse(books_ids).name_get()
+        return super(LibraryBook, self)._name_search(
+            name=name, args=args, operator=operator,
+            limit=limit, name_get_uid=name_get_uid)
 
     @api.multi
     def write(self, values):
