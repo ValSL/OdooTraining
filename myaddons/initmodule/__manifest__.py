@@ -1,5 +1,5 @@
 {
-    'name': 'Ttile',
+    'name': 'My Library',
     'summary': 'Short subtitle phrase',
     'description': """Long description""",
     'author': 'Valid Saley',
