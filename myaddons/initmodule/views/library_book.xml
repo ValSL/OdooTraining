@@ -48,6 +48,7 @@
                     <field name="currency_id"/>
                     <field name="category_id"/>
                     <field name="age_days"/>
+
                 </group>
                 <group>
                     <field name="short_name"/>
@@ -58,6 +59,7 @@
                     <field name="cover" widget="image" class="oe_avatar"/>
                     <field name="reader_rating"/>
                     <field name="ref_doc_id"/>
+                    <field name="manager_remarks"/>
                 </group>
             </form>
         </field>

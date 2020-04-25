@@ -68,6 +68,7 @@ class LibraryBook(models.Model):
     )
 
     ref_doc_id = fields.Reference(selection='_referencable_models', string='Reference Document')
+    manager_remarks = fields.Text('Manager Remarks')
 
     @api.depends('date_release')
     def _compute_age(self):
@@ -130,6 +131,20 @@ class LibraryBook(models.Model):
             ('lost', 'available')
         ]
         return (old_state, new_state) in allowed
+
+    @api.model
+    def create(self, values):
+        if not self.user_has_groups('initmodule.group_librarian'):
+            if 'manager_remarks' in values:
+                raise UserError('You are not allowed to modify manager_remarks')
+        return super().create(values)
+
+    @api.multi
+    def write(self, values):
+        if not self.user_has_groups('initmodule.group_librarian'):
+            if 'manager_remarks' in values:
+                raise UserError('You are not allowed to modify manager_remarks')
+        return super().write(values)
 
     @api.multi
     def change_state(self, new_state):

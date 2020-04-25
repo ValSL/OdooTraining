@@ -1,5 +1,5 @@
 from odoo import fields, models, api
-from datetime import  timedelta
+from datetime import timedelta
 
 
 class LibraryBook(models.Model):

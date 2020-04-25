@@ -2,7 +2,7 @@
 {
     'name': "My Library Returns Dates",  # Module title
     'summary': "Manage return dates for books",  # Module subtitle phrase
-    'author': "Parth Gajjar",
+    'author': "Valid Saley",
     'website': "http://www.example.com",
     'category': 'Uncategorized',
     'version': '12.0.1',
