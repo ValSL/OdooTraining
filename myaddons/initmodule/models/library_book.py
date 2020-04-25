@@ -39,18 +39,19 @@ class LibraryBook(models.Model):
     description = fields.Html(string='Description', sanitize=True, strip_style=False, translate=False)
     cover = fields.Binary('Book Cover')
     out_of_print = fields.Boolean('Out of print?')
-    pages = fields.Integer(
-        string='Number of pages',
-        default=0,
-        help='Total book page count',
-        groups='base.group_user',
-        states={'lost': [('readonly', True)]},
-        copy=True,
-        index=False,
-        readonly=False,
-        required=False,
-        company_depends=False,
-    )
+    # pages = fields.Integer(
+    #     string='Number of pages',
+    #     default=0,
+    #     help='Total book page count',
+    #     groups='base.group_user',
+    #     states={'lost': [('readonly', True)]},
+    #     copy=True,
+    #     index=False,
+    #     readonly=False,
+    #     required=False,
+    #     company_depends=False,
+    # )
+    pages = fields.Integer('Number of Pages')
     reader_rating = fields.Float('Reader Average Rating', (14, 4))
     cost_price = fields.Float('Book Cost', dp.get_precision('Book Price'))
     currency_id = fields.Many2one('res.currency', string='Currency')
@@ -158,6 +159,20 @@ class LibraryBook(models.Model):
         return super(LibraryBook, self)._name_search(
             name=name, args=args, operator=operator,
             limit=limit, name_get_uid=name_get_uid)
+
+    @api.model
+    def _get_average_cost(self):
+        grouped_result = self.read_group(
+            [('cost_price', '!=', False)],  # Domain
+            ['category_id', 'cost_price:avg'],  # Fields to access
+            ['category_id']  # group_by
+        )
+        print(self)
+        return grouped_result
+
+    def grouped_data(self):
+        data = self._get_average_cost()
+        logger.info("Groupped Data %s" % data)
 
     @api.multi
     def write(self, values):
