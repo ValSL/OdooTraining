@@ -6,7 +6,7 @@
     'licence': 'APGL-3',
     'website': 'http://www.example.com',
     'category': 'Library',
-    'version': '12.0.1.0.0',
+    'version': '12.0.1.0.1',
     'depends': ['base', 'decimal_precision'],
     'data': [
         'security/groups.xml',
