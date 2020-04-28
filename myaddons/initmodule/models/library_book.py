@@ -170,6 +170,12 @@ class LibraryBook(models.Model):
         print(self)
         return grouped_result
 
+    @api.model
+    def _update_cost_price(self):
+        all_books = self.search([])
+        for book in all_books:
+            book.cost_price += 10
+
     def grouped_data(self):
         data = self._get_average_cost()
         logger.info("Groupped Data %s" % data)
