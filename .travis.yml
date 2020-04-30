@@ -6,6 +6,10 @@ cache:
     - $HOME/.cache/pip
 python:
   - "3.6"
+branches:
+  only:
+    - master
+
 addons:
   apt:
     packages:
