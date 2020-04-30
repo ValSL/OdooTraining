@@ -172,6 +172,7 @@ class LibraryBook(models.Model):
 
     @api.model
     def _update_cost_price(self):
+        import pdb; pdb.set_trace()
         all_books = self.search([])
         for book in all_books:
             book.cost_price += 10
